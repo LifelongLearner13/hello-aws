@@ -1,16 +1,18 @@
 package com.sierragregg.helloaws.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HelloWorldController {
 
     @GetMapping({"/", "hello"})
-    public String helloWorld(@RequestParam(required = false, defaultValue = "world") String name, Model model) {
-        model.addAttribute("name", name);
+    public String helloWorld(Model model, @AuthenticationPrincipal OidcUser user) {
+        model.addAttribute("name", user.getGivenName());
+        model.addAttribute("email", user.getEmail());
         return "hello-world";
     }
 }
